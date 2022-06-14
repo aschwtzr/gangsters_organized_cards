@@ -18,19 +18,25 @@ export default function Block(props) {
   }
 
   const cellStyle = {
-    border: '1px solid #555',
+    border: '3px solid #555',
     width: '90px',
     height: '90px',
-    lineHeight: '70px',
-    textAlign: 'center',
+    textAlign: 'left',
+    backgroundColor: 'white',
+    fontSize: 11,
+    margin: '.1rem',
   };
+
+  const blockIncome = props.stores.reduce((sum, curr) => (sum += curr.income), 0)
   return(
     <td key={props.id}>
-      {props.owner ? (
-        <div style={{...cellStyle, ...{ color: 'orange', borderColor: color }}}>{`${props.type} (${props.owner})`}</div>
-      ) : (
-        <button style={{...cellStyle, ...{ color: color, borderColor: color }}} onClick={() => props.onClick(props.id)}>{props.type}</button>
-      )}
+      <div style={{...cellStyle, ...{ color: color, borderColor: color }}} onClick={() => props.captureBlock(props.id)}>
+        <div style={{display: 'flex', flexDirection: 'column', paddingLeft: '.25rem', padding: '.25rem'}}>
+          <div>{props.type}</div>
+          <div>Income: ${blockIncome}</div>
+          <div>Owner {props.ownwer}</div>
+        </div>
+      </div>
     </td>
   )
 }

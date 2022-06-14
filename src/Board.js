@@ -1,7 +1,9 @@
 import React from 'react';
 import Block from './components/Block.js';
+import Hood from './components/Hood.js'
 
 export function Board({ ctx, G, moves }) {
+  const [availableRecruits, setAvailableRecruits] = React.useState(null)
   let winner = '';
   if (ctx.gameover) {
     winner =
@@ -22,7 +24,7 @@ export function Board({ ctx, G, moves }) {
         cells.push(
           <Block
             owner={block.owner}
-            onClick={(id) => moves.clickCell(block.id)} 
+            captureBlock={() => moves.captureBlock(block.id)} 
             id={block.id}
             key={`block_${block.id}`}
             stores={block.stores}
@@ -34,14 +36,30 @@ export function Board({ ctx, G, moves }) {
       tbody.push(<tr key={`city_row_${i}`}>{cells}</tr>);
     }
   }
+  const wrapperStyle ={
+    display: 'flex',
+    flexDirection: 'row'
+  }
 
+  const fillRecruits = () => {
+    setAvailableRecruits([<Hood key='recruit-0'/>, <Hood key='recruit-1'/>, <Hood key='recruit-2'/>])
+  }
   return (
     <div>
-      <table id="board">
-        <tbody>{tbody}</tbody>
-      </table>
-      <button>Seed World</button>
-      {winner}
+      <div style={wrapperStyle}>
+        <table id="city_board" style={{backgroundColor: 'rgb(51, 50, 49)'}}>
+          <tbody>{tbody}</tbody>
+        </table>
+        <div style={{...wrapperStyle, ...{flexDirection: 'column'}}}>
+          <div id='actions_panel' style={{...wrapperStyle, width: ''}}>
+            <button onClick={() => moves.rollDice()}>Roll Dice</button>
+            <button onClick={() => fillRecruits()}>Recruit Hoods</button>
+          </div>
+          <div id='recruitment_panel' style={{...wrapperStyle, ...{flexDirection: 'column', paddingLeft: '1.5rem'}}}>
+            {availableRecruits}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

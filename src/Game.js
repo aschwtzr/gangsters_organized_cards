@@ -1,4 +1,5 @@
 import { INVALID_MOVE } from 'boardgame.io/core';
+import { randomInteger } from './simulation/utilities'
 const commercialBuildings = require('./data/commercial_buildings.csv')
 const industrialBuildings = require('./data/industrial_buildings.csv')
 const residentialBuildings = [{
@@ -62,28 +63,40 @@ function getInitialState(ctx) {
   const G = {
     cells: blocks,
     worldArea,
-    suspicion: 0,
-    power: 10,
+    "0": {
+      suspicion: 0,
+      power: 10,
+      money: 400,
+      moves: 0,
+    },
+    "1": {
+      suspicion: 0,
+      power: 10,
+      money: 400,
+      moves: 0,
+    },
   }
   return G;
 }
 
 export const GangstersOrganizedCards = {
   setup: getInitialState,
-
+  
   turn: {
     minMoves: 1,
-    maxMoves: 1,
+    maxMoves: (G, ctx) => (G[ctx.currentPlayer].moves <= 0),
   },
 
   moves: {
-    clickCell: (G, ctx, id) => {
+    captureBlock: (G, ctx, id) => {
       if (G.cells[id].owner !== null) {
         return INVALID_MOVE;
       }
-      console.log(G.cells[id])
       G.cells[id] = {...G.cells[id], ...{owner: ctx.currentPlayer}}
     },
+    rollDice: (G, ctx) => {
+      G[ctx.currentPlayer].moves = ctx.random.Die(6) + ctx.random.Die(6)
+    }
   },
   
   endIf: (G, ctx) => {
@@ -127,8 +140,3 @@ function IsVictory(cells) {
 function IsDraw(cells) {
   return cells.filter(c => c.owner === null).length === 0;
 }
-
-function randomInteger(min, max) {
-  return Math.floor(Math.random() * (max - min ) + min);
-}
-
