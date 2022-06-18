@@ -1,9 +1,20 @@
 import React from 'react';
-import Block from './components/Block.js';
-import Hood from './components/Hood.js'
+import Block from './components/Block';
+import RecruitBoard from './views/RecruitView';
+import BoardView from './views/BoardView';
 
 export function Board({ ctx, G, moves }) {
   const [availableRecruits, setAvailableRecruits] = React.useState(null)
+  const [selectedBlock, setSelectedBlock] = React.useState(null)
+  const [currentView, setCurrentView] = React.useState('')
+
+  const selectBlockAndSetView = (block) => {
+    setSelectedBlock(block)
+    if (currentView !== 'board') {
+      setCurrentView('board')
+    }
+  }
+
   let winner = '';
   if (ctx.gameover) {
     winner =
@@ -24,7 +35,8 @@ export function Board({ ctx, G, moves }) {
         cells.push(
           <Block
             owner={block.owner}
-            captureBlock={() => moves.captureBlock(block.id)} 
+            captureBlock={() => moves.captureBlock(block.id)}
+            selectBlock={() => selectBlockAndSetView(block)}
             id={block.id}
             key={`block_${block.id}`}
             stores={block.stores}
@@ -41,8 +53,19 @@ export function Board({ ctx, G, moves }) {
     flexDirection: 'row'
   }
 
-  const fillRecruits = () => {
-    setAvailableRecruits([<Hood key='recruit-0'/>, <Hood key='recruit-1'/>, <Hood key='recruit-2'/>])
+  const recruitView = <RecruitBoard recruit={(hood) => moves.recruitHood(hood)} name={'one'} key={'one'}/>
+  const boardView = <BoardView selectedBlock={selectedBlock} currentMoves={G[ctx.currentPlayer].moves} currentPlayer={ctx.currentPlayer} key={'two'}/>
+  const hqView = <RecruitBoard recruit={(hood) => moves.recruitHood(hood)} name={'three'} key={'three'}/>
+
+  const renderSwitch = () => {
+    switch (currentView) {
+      case 'recruit':
+        return recruitView
+      case 'board':
+        return boardView
+      case 'hq':
+        return hqView
+    }
   }
   return (
     <div>
@@ -51,13 +74,16 @@ export function Board({ ctx, G, moves }) {
           <tbody>{tbody}</tbody>
         </table>
         <div style={{...wrapperStyle, ...{flexDirection: 'column'}}}>
-          <div id='actions_panel' style={{...wrapperStyle, width: ''}}>
+          <div id='actions_panel' style={{...wrapperStyle, paddingBottom: '1.5rem'}}>
             <button onClick={() => moves.rollDice()}>Roll Dice</button>
-            <button onClick={() => fillRecruits()}>Recruit Hoods</button>
+            <button onClick={() => setCurrentView('recruit')}>Recruitment</button>
+            <button onClick={() => setCurrentView('board')}>Board</button>
+            <button onClick={() => setCurrentView('hq')}>Headquarters</button>
           </div>
           <div id='recruitment_panel' style={{...wrapperStyle, ...{flexDirection: 'column', paddingLeft: '1.5rem'}}}>
             {availableRecruits}
           </div>
+          { renderSwitch() }
         </div>
       </div>
     </div>

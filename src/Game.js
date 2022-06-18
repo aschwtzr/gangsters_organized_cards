@@ -5,8 +5,8 @@ const industrialBuildings = require('./data/industrial_buildings.csv')
 const residentialBuildings = [{
   name: 'Tenement Block',
   map_max: 1200,
-  income_min: 50,
-  income_max: 150,
+  income_min: 30,
+  income_max: 100,
 }]
 
 const municipalBuildings = [{
@@ -68,12 +68,14 @@ function getInitialState(ctx) {
       power: 10,
       money: 400,
       moves: 0,
+      hoods: []
     },
     "1": {
       suspicion: 0,
       power: 10,
       money: 400,
       moves: 0,
+      hoods: []
     },
   }
   return G;
@@ -96,7 +98,10 @@ export const GangstersOrganizedCards = {
     },
     rollDice: (G, ctx) => {
       G[ctx.currentPlayer].moves = ctx.random.Die(6) + ctx.random.Die(6)
-    }
+    },
+    recruitHood: (G, ctx, hood) => {
+      G[ctx.currentPlayer].hoods = [...G[ctx.currentPlayer].hoods, hood]
+    },
   },
   
   endIf: (G, ctx) => {

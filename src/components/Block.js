@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Block(props) {
   const [illegalBusiness, setIllegalBusiness] = React.useState({});
-  const [legalBusinesses, setLegalBusinesses] = React.useState([]);
+  const [defensePoints, setDefensePoints] = React.useState(0)
 
   let color = ''
   switch(props.type) {
@@ -30,7 +30,7 @@ export default function Block(props) {
   const blockIncome = props.stores.reduce((sum, curr) => (sum += curr.income), 0)
   return(
     <td key={props.id}>
-      <div style={{...cellStyle, ...{ color: color, borderColor: color }}} onClick={() => props.captureBlock(props.id)}>
+      <div style={{...cellStyle, ...{ color: color, borderColor: color }}} onClick={() => props.selectBlock()}>
         <div style={{display: 'flex', flexDirection: 'column', paddingLeft: '.25rem', padding: '.25rem'}}>
           <div>{props.type}</div>
           <div>Income: ${blockIncome}</div>

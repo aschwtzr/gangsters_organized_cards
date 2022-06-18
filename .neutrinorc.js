@@ -10,7 +10,7 @@ module.exports = {
         title: 'boardgame_gangsters'
       },
       devServer: {
-        port: 3000
+        port: 8001
       },
     }),
     (neutrino) => {
