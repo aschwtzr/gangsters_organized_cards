@@ -1,4 +1,6 @@
 import React from 'react';
+import { playerPower } from '../simulation/player'
+import Hood from '../components/Hood.js';
 
 const wrapperStyle ={
   display: 'flex',
@@ -7,12 +9,29 @@ const wrapperStyle ={
 
 const shouldDisable = (requiredMoves, currentMoves) => { requiredMoves <= currentMoves}
 
-export default function RecruitBoard(props) {
+export default function BoardView(props) {
   let currentMoves = props.currentMoves
-  let owner = props.selectedBlock.owner
+  let currentPlayer = props.currentPlayer
+  let owner = props.selectedBlock ? props.selectedBlock.owner : ''
+  console.log(currentPlayer)
   
   return (
     <div>
+      <div>
+        <div>Stats</div>
+        <div>Player Power: {playerPower(currentPlayer.hoods, currentPlayer.respect, currentPlayer.personalCash, currentPlayer.suspicion)} </div>
+        <div>Personal Cash: {currentPlayer.personalCash} </div>
+      </div>
+      <div>
+        <div>
+          Hoods
+        </div>
+        <div>
+          {currentPlayer.hoods.map((data, idx) => {
+            return <Hood key={`board_view_hood_${idx}`} info={data} recruit={() => () => {}} owned={true} />          
+          })}
+        </div>
+      </div>
       {props.selectedBlock ? 
         <div id="current_block">
           <div>Type: {props.selectedBlock.name}</div>
