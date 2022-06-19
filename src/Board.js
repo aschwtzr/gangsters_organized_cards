@@ -2,11 +2,24 @@ import React from 'react';
 import Block from './components/Block';
 import RecruitBoard from './views/RecruitView';
 import BoardView from './views/BoardView';
+import { randomHood } from './simulation/utilities'
 
 export function Board({ ctx, G, moves }) {
-  const [availableRecruits, setAvailableRecruits] = React.useState(null)
   const [selectedBlock, setSelectedBlock] = React.useState(null)
   const [currentView, setCurrentView] = React.useState('')
+  const [availableRecruits, setAvailableRecruits] = React.useState([])
+  React.useEffect(() => {
+    fetchRecruits()
+  }, [])
+
+  const fetchRecruits = async () => {
+    const promises = [...Array(3)].map(async (_, idx) => {
+      return randomHood()
+    })
+    const hoods = await Promise.all(promises)
+    setAvailableRecruits(hoods)
+    return hoods
+  }
 
   const selectBlockAndSetView = (block) => {
     setSelectedBlock(block)
@@ -53,9 +66,9 @@ export function Board({ ctx, G, moves }) {
     flexDirection: 'row'
   }
 
-  const recruitView = <RecruitBoard recruit={(hood) => moves.recruitHood(hood)} name={'one'} key={'one'}/>
-  const boardView = <BoardView selectedBlock={selectedBlock} currentMoves={G[ctx.currentPlayer].moves} currentPlayer={ctx.currentPlayer} key={'two'}/>
-  const hqView = <RecruitBoard recruit={(hood) => moves.recruitHood(hood)} name={'three'} key={'three'}/>
+  const recruitView = <RecruitBoard recruit={(hood) => moves.recruitHood(hood)} name={'one'} key={'one'} availableRecruits={availableRecruits}/>
+  const boardView = <BoardView selectedBlock={selectedBlock} currentMoves={G[ctx.currentPlayer].moves} currentPlayer={G[ctx.currentPlayer]} key={'two'}/>
+  const hqView = <RecruitBoard recruit={(hood) => moves.recruitHood(hood)} name={'three'} key={'three'} availableRecruits={availableRecruits} />
 
   const renderSwitch = () => {
     switch (currentView) {
@@ -79,9 +92,6 @@ export function Board({ ctx, G, moves }) {
             <button onClick={() => setCurrentView('recruit')}>Recruitment</button>
             <button onClick={() => setCurrentView('board')}>Board</button>
             <button onClick={() => setCurrentView('hq')}>Headquarters</button>
-          </div>
-          <div id='recruitment_panel' style={{...wrapperStyle, ...{flexDirection: 'column', paddingLeft: '1.5rem'}}}>
-            {availableRecruits}
           </div>
           { renderSwitch() }
         </div>
