@@ -53,8 +53,17 @@ export const GangstersOrganizedCards = {
     rollDice: (G, ctx) => {
       G[ctx.currentPlayer].moves = ctx.random.Die(6) + ctx.random.Die(6)
     },
-    recruitHood: (G, ctx, hood) => {
-      G[ctx.currentPlayer].hoods = [...G[ctx.currentPlayer].hoods, hood]
+    purchase: (G, ctx) => {
+
+    },
+    recruitHood: (G, ctx, payload) => {
+      const copy = Object.values({...G.availableRecruits})
+      console.log(copy)
+      copy.splice(payload.idx, 1)
+      console.log(copy)
+      G.availableRecruits = copy
+      G[ctx.currentPlayer].moves -= 1
+      G[ctx.currentPlayer].hoods = [...G[ctx.currentPlayer].hoods, payload.data]
     },
     setAvailableRecruits: (G, ctx, hoods) => {
       G.availableRecruits = hoods

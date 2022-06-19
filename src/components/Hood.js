@@ -10,7 +10,10 @@ export default function Hood(props) {
   }
 
   const intimiditation = hoodIntimiditation(props.info.guns, props.info.fists, props.info.intelligence)
-  console.log(props.info && !recruited)
+  const money = props.player.money
+  const moves = props.player.moves
+  const canRecruit = (!recruited || props.owned) && props.info.salary < money
+
   return(
     <div>
       {props.info && !recruited ? ( 
@@ -24,7 +27,7 @@ export default function Hood(props) {
           <div>Fist Fightin': {props.info.fists}</div>
           <div>Intelligence: {props.info.intelligence}</div>
           <div>Intimidation: {intimiditation}</div>
-          { recruited || props.owned ? '' : <button onClick={() => recruitSelf()}>Recruit</button> }          
+          { canRecruit && moves >= 1 ?  <button onClick={() => recruitSelf()}>Recruit</button> : <div />}
           <br/>
       </div>) : (<div/>)}
     </div>

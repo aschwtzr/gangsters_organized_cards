@@ -8,7 +8,7 @@ export default function RecruitBoard(props) {
       {props.availableRecruits.length ? 
       <div>
         {props.availableRecruits.map((data, idx) => {
-          return <Hood key={`recruit_board_hood_${idx}`} info={data} recruit={() => props.recruit(data)} />
+          return <Hood key={`recruit_board_hood_${idx}`} info={data} recruit={() => props.recruit({data, idx})} player={props.player} />
         })}
       </div> : <div />}
       <button onClick={() => fetchRecruits()}>Get New Roster</button>
