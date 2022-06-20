@@ -27,10 +27,11 @@ function getInitialState(ctx) {
   })
   const G = {
     cells: blocks,
+    hasRolled: false,
     worldArea,
     "0": { ...basePlayer },
     "1": { ...basePlayer },
-    availableRecruits: [],
+    availableRecruits: {},
   }
   return G;
 }
@@ -51,19 +52,19 @@ export const GangstersOrganizedCards = {
       G.cells[id] = {...G.cells[id], ...{owner: ctx.currentPlayer}}
     },
     rollDice: (G, ctx) => {
+      G.hasRolled = true
       G[ctx.currentPlayer].moves = ctx.random.Die(6) + ctx.random.Die(6)
     },
     purchase: (G, ctx) => {
 
     },
-    recruitHood: (G, ctx, payload) => {
-      const copy = Object.values({...G.availableRecruits})
-      console.log(copy)
-      copy.splice(payload.idx, 1)
-      console.log(copy)
+    recruitHood: (G, ctx, data) => {
+      const copy = {...G.availableRecruits}
+      delete copy[data.gId]
       G.availableRecruits = copy
       G[ctx.currentPlayer].moves -= 1
-      G[ctx.currentPlayer].hoods = [...G[ctx.currentPlayer].hoods, payload.data]
+      G[ctx.currentPlayer].money -= data.salary
+      G[ctx.currentPlayer].hoods = {...G[ctx.currentPlayer].hoods, ...{[data.gId]: data}}
     },
     setAvailableRecruits: (G, ctx, hoods) => {
       G.availableRecruits = hoods

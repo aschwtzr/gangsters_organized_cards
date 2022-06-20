@@ -13,15 +13,18 @@ export function Board({ ctx, G, moves }) {
   }, [])
 
   const fetchRecruits = async () => {
-    const promises = [...Array(3)].map(async (_, idx) => {
+    const promises = [...Array(3)].map(async (_) => {
       return randomHood()
     })
     const hoods = await Promise.all(promises)
-    moves.setAvailableRecruits(hoods)
+    const mapped = hoods.reduce((sum, curr) => {
+      sum[curr.gId] = curr
+      return sum 
+    }, {})
+    
+    moves.setAvailableRecruits(mapped)
     return hoods
   }
-
-
 
   let winner = '';
   if (ctx.gameover) {
@@ -39,7 +42,7 @@ export function Board({ ctx, G, moves }) {
     flexDirection: 'row'
   }
 
-  const recruitView = <RecruitView recruit={(hood) => moves.recruitHood(hood)} name={'one'} key={'one'} availableRecruits={G.availableRecruits} player={G[ctx.currentPlayer]} />
+  const recruitView = <RecruitView recruit={(hood) => moves.recruitHood(hood)} name={'one'} key={'one'} availableRecruits={G.availableRecruits} player={G[ctx.currentPlayer]} fetchRecruits={fetchRecruits} />
   const boardView = <BoardView selectedBlock={selectedBlock} currentMoves={G[ctx.currentPlayer].moves} currentPlayer={G[ctx.currentPlayer]} key={'two'}/>
   const hqView = <BoardView selectedBlock={selectedBlock} currentMoves={G[ctx.currentPlayer].moves} currentPlayer={G[ctx.currentPlayer]} key={'three'}/>
 
@@ -65,7 +68,7 @@ export function Board({ ctx, G, moves }) {
         />
         <div style={{...wrapperStyle, ...{flexDirection: 'column'}}}>
           <div id='actions_panel' style={{...wrapperStyle, paddingBottom: '1.5rem'}}>
-            <button onClick={() => moves.rollDice()}>Roll Dice</button>
+            <button disabled={G.hasRolled} onClick={() => moves.rollDice()}>Roll Dice</button>
             <button onClick={() => setCurrentView('recruit')}>Recruitment</button>
             <button onClick={() => setCurrentView('board')}>Board</button>
             <button onClick={() => setCurrentView('hq')}>Headquarters</button>

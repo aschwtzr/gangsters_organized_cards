@@ -13,6 +13,7 @@ export function randomHood() {
   return new Promise((resolve, reject) => {
     axios.get(randomUserURL).then(res => {
       const traits = {
+        gId: Date.now(),
         guns: randomInteger(10, 100),
         fists: randomInteger(30, 100),
         intelligence: randomInteger(10, 100),

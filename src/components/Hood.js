@@ -1,5 +1,6 @@
 import React from 'react';
-import { hoodIntimiditation } from '../simulation/player'
+import { hoodIntimiditation } from '../simulation/player';
+
 export default function Hood(props) {
   const [recruited, setRecruited] = React.useState(false)
 
