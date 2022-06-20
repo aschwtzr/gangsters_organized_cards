@@ -5,6 +5,7 @@ import CityView from './views/CityView';
 import { randomHood } from './simulation/utilities';
 
 export function Board({ ctx, G, moves }) {
+  // TODO: selectedBlock should be a function that takes a selected index to make BoardView reactive
   const [selectedBlock, setSelectedBlock] = React.useState(null)
   const [currentView, setCurrentView] = React.useState('')
 
