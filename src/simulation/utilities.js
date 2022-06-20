@@ -17,7 +17,8 @@ export function randomHood() {
         guns: randomInteger(10, 100),
         fists: randomInteger(30, 100),
         intelligence: randomInteger(10, 100),
-        salary: 0
+        salary: 0,
+        moved: false,
       }
       traits.salary = Math.floor((traits.guns * 1.2) + traits.fists + (traits.intelligence * 1.4) / 2)
       resolve({...res.data.results[0], ...traits})

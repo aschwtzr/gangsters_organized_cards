@@ -13,7 +13,7 @@ export const basePlayer = {
   suspicion: 0,
   respect: 10,
   power: 10,
-  money: 400,
+  money: 800,
   personalCash: 0,
   moves: 0,
   hoods: {},

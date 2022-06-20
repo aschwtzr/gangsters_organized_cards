@@ -22,7 +22,7 @@ export default function Hood(props) {
           <img src={props.info.picture.thumbnail} />
           <div>{props.info.name.first} {props.info.name.last}</div>
           <div>{props.info.dob.age} years-old</div>
-          <div>{props.info.nat}</div>
+          <div>Nationality: {props.info.nat}</div>
           <div>Weekly Take: ${props.info.salary}</div>
           <div>Gun Handling: {props.info.guns}</div>
           <div>Fist Fightin': {props.info.fists}</div>

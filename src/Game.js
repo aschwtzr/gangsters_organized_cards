@@ -2,9 +2,10 @@ import { INVALID_MOVE } from 'boardgame.io/core';
 import { randomInteger } from './simulation/utilities'
 import { basePlayer } from './simulation/player'
 import { blockTypes, getBlockStoreDB } from './simulation/board'
+import { purchase } from './simulation/boardMoves';
 
 function getInitialState(ctx) {
-  const worldArea = 9
+  const worldArea = 8
   const blocks = Array(worldArea * worldArea).fill(null).map((val, arrIdx) => {
     let idx = ctx.random.Die(4) - 1
     let tryBlock = {}
@@ -55,8 +56,20 @@ export const GangstersOrganizedCards = {
       G.hasRolled = true
       G[ctx.currentPlayer].moves = ctx.random.Die(6) + ctx.random.Die(6)
     },
-    purchase: (G, ctx) => {
-
+    purchase: (G, ctx, income, hoods, blockId) => {
+      const movedHoodIds = hoods.map(hood => hood.gId)
+      const copy = {...G[ctx.currentPlayer].hoods}
+      movedHoodIds.forEach(id => copy[id].moved = true)
+      G[ctx.currentPlayer].hoods = copy
+      G[ctx.currentPlayer].moves -= 1
+      let success, price
+      ({success, price} = purchase(income, hoods, (n) => (ctx.random.Die(n))))
+      console.log(`SUCCESS: ${success}`)
+      console.log(`PRICE: ${price}`)
+      if (success) {
+        G.cells[blockId] = {...G.cells[blockId], ...{owner: ctx.currentPlayer}}
+        G[ctx.currentPlayer].money -= Math.floor(price)
+      }
     },
     recruitHood: (G, ctx, data) => {
       const copy = {...G.availableRecruits}

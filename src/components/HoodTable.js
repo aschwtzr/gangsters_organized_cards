@@ -28,7 +28,7 @@ export default function HoodTable(props) {
                     <td>{hood.fists}</td>
                     <td>{hood.intelligence}</td>
                     <td>{hoodIntimiditation(hood.guns, hood.fists, hood.intelligence)}</td>
-                    {props.action ? <td><button onClick={() =>props.action(hood.gId)}>{props.buttonTitle}</button></td> : null}
+                    {props.action ? <td><button onClick={() =>props.action(hood.gId)}>{props.buttonTitle(hood.gId)}</button></td> : null}
                   </tr>)
         })}
       </tbody>

@@ -43,8 +43,8 @@ export function Board({ ctx, G, moves }) {
   }
 
   const recruitView = <RecruitView recruit={(hood) => moves.recruitHood(hood)} name={'one'} key={'one'} availableRecruits={G.availableRecruits} player={G[ctx.currentPlayer]} fetchRecruits={fetchRecruits} />
-  const boardView = <BoardView selectedBlock={selectedBlock} currentMoves={G[ctx.currentPlayer].moves} currentPlayer={G[ctx.currentPlayer]} key={'two'}/>
-  const hqView = <BoardView selectedBlock={selectedBlock} currentMoves={G[ctx.currentPlayer].moves} currentPlayer={G[ctx.currentPlayer]} key={'three'}/>
+  const boardView = <BoardView selectedBlock={selectedBlock} currentMoves={G[ctx.currentPlayer].moves} currentPlayer={G[ctx.currentPlayer]} purchase={moves.purchase} key={'two'}/>
+  const hqView = <BoardView selectedBlock={selectedBlock} currentMoves={G[ctx.currentPlayer].moves} currentPlayer={G[ctx.currentPlayer]} purchase={moves.purchase} key={'three'}/>
 
   const renderSwitch = () => {
     switch (currentView) {
